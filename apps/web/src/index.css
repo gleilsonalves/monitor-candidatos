@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------
+   MONITOR DE CANDIDATOS — sistema de design "dossiê institucional"
+   Papel + carimbo + tinta oficial sobre fundo grafite-tinta.
+   Ver README.md para a justificativa das escolhas visuais.
+------------------------------------------------------------------------ */
+
+@theme {
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* base */
+  --color-bg: #0b0e14;
+  --color-surface: #12161f;
+  --color-surface-2: #171c28;
+  --color-surface-3: #1d2331;
+  --color-border: #262c3c;
+  --color-border-soft: #1c2130;
+
+  /* papel / carimbo */
+  --color-paper: #f2ede1;
+  --color-paper-dim: #e4dcc8;
+  --color-paper-ink: #2a2318;
+
+  /* texto */
+  --color-ink: #eae7dd;
+  --color-ink-dim: #c6c2b4;
+  --color-muted: #8990a3;
+  --color-muted-2: #5e6577;
+
+  /* acento */
+  --color-seal: #3e7cb1;
+  --color-seal-bright: #6aa8dd;
+  --color-ochre: #c88a2e;
+  --color-ochre-bright: #e0a63e;
+
+  /* estágio jurídico — escala sequencial de devido processo.
+     nunca reordenar/colapsar; ver src/data/estagioJuridico.ts */
+  --color-estagio-denuncia: #d9b84a;
+  --color-estagio-investigacao: #e0973a;
+  --color-estagio-acao: #db7a34;
+  --color-estagio-cond1: #c85c4a;
+  --color-estagio-cond2: #b23a3a;
+  --color-estagio-transito: #8b1e1e;
+  --color-estagio-arquivado: #5c6470;
+  --color-estagio-absolvido: #3e8c63;
+
+  /* categoria de evento */
+  --color-cat-realizacao: #3e8c63;
+  --color-cat-controversia: #c88a2e;
+  --color-cat-neutro: #6b7280;
+
+  --shadow-stamp: 0 1px 0 rgba(0, 0, 0, 0.25), 0 6px 16px -6px rgba(0, 0, 0, 0.5);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-ochre);
+  color: #14100a;
+}
+
+* {
+  scrollbar-color: var(--color-border) transparent;
+}
+
+/* watermark de fundo: retícula fina evocando papel timbrado oficial */
+.paper-grain {
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(234, 231, 221, 0.045) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* fader vertical (painel de pesos) — trilho estilo console de mixagem */
+.fader-track {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(
+    to top,
+    var(--color-ochre) 0%,
+    var(--color-ochre) calc(var(--fader-fill, 50) * 1%),
+    var(--color-border) calc(var(--fader-fill, 50) * 1%),
+    var(--color-border) 100%
+  );
+  border-radius: 999px;
+  cursor: pointer;
+  outline: none;
+}
+.fader-track::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-paper-ink);
+  box-shadow: var(--shadow-stamp);
+  cursor: grab;
+}
+.fader-track::-moz-range-thumb {
+  width: 26px;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-paper-ink);
+  box-shadow: var(--shadow-stamp);
+  cursor: grab;
+}
+.fader-track:focus-visible {
+  box-shadow: 0 0 0 3px rgba(200, 138, 46, 0.45);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Exportação de relatório (Fase 4): "imprimir" vira "gerar PDF" nativo do
+   navegador (Ctrl+P → Salvar como PDF) — nenhuma lib nova. `.no-print`
+   esconde navegação/controles interativos; o conteúdo factual (timeline,
+   fontes, carimbos de estágio jurídico, breakdown de score) permanece.
+------------------------------------------------------------------------ */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #14171f !important;
+  }
+  .paper-grain {
+    display: none !important;
+  }
+  a {
+    color: #1c4d73 !important;
+    text-decoration: underline;
+  }
+  * {
+    box-shadow: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "@monitor-candidatos/workers",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Framework de coletores (workers) do Monitor de Candidatos — fetch com retry/rate limit, raw store append-only, normalização e upsert com dedup por hash",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "collect:camara": "tsx src/cli/collectCamara.ts",
+    "collect:tse": "tsx src/cli/collectTse.ts",
+    "collect:transparencia": "tsx src/cli/collectTransparencia.ts",
+    "compute:metricas": "tsx src/cli/computeMetricas.ts",
+    "collect:youtube": "tsx src/cli/collectYoutube.ts",
+    "collect:bluesky": "tsx src/cli/collectBluesky.ts",
+    "collect:meta-ads": "tsx src/cli/collectMetaAds.ts",
+    "collect:datajud": "tsx src/cli/collectDatajud.ts",
+    "collect:tcu": "tsx src/cli/collectTcu.ts",
+    "collect:dou": "tsx src/cli/collectDou.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=18.17"
+  }
+}
